@@ -39,6 +39,34 @@
                             </select>
                         </div>
                         <div class="mb-3">
+                            <label for="modalidad" class="form-label">Modalidad de la cita</label>
+                            <select class="form-select" id="modalidad" name="modalidad">
+                                <option value="" disabled selected>Selecciona la modalidad</option>
+                                <option value="en_linea">En línea</option>
+                                <option value="presencial">Presencial</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Número de teléfono</label>
+                            <div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="telefonoOption" id="telefonoRegistrado" value="registrado" checked>
+                                    <label class="form-check-label" for="telefonoRegistrado">
+                                        Usar teléfono registrado en DailyFit: <strong>5512345678</strong>
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="telefonoOption" id="telefonoOtro" value="otro">
+                                    <label class="form-check-label" for="telefonoOtro">
+                                        Usar otro número de teléfono
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="mt-2" id="nuevoTelefonoDiv" style="display: none;">
+                                <input type="tel" class="form-control" id="nuevoTelefono" name="nuevoTelefono" placeholder="Ingresa el nuevo número de teléfono">
+                            </div>
+                        </div>
+                        <div class="mb-3">
                             <label for="motivo" class="form-label">Motivo de la cita</label>
                             <textarea class="form-control" id="motivo" name="motivo" rows="4" placeholder="Describe brevemente el motivo de tu cita"></textarea>
                         </div>
@@ -58,6 +86,25 @@
     // Cargar la barra de navegación en el contenedor
     $(function() {
         $("#navbar-placeholder").load("barraNavegacionUsuario.html");
+    });
+
+    // Mostrar u ocultar el campo para un nuevo número de teléfono
+    document.addEventListener('DOMContentLoaded', function() {
+        const telefonoRegistrado = document.getElementById('telefonoRegistrado');
+        const telefonoOtro = document.getElementById('telefonoOtro');
+        const nuevoTelefonoDiv = document.getElementById('nuevoTelefonoDiv');
+
+        telefonoRegistrado.addEventListener('change', function() {
+            if (this.checked) {
+                nuevoTelefonoDiv.style.display = 'none';
+            }
+        });
+
+        telefonoOtro.addEventListener('change', function() {
+            if (this.checked) {
+                nuevoTelefonoDiv.style.display = 'block';
+            }
+        });
     });
 </script>
 
