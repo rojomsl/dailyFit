@@ -99,6 +99,26 @@ app.get('/api/usuarios', (req, res) => {
   });
 });
 
+// Obtener usuario por correo para login
+app.post('/api/login', (req, res) => {
+  const { correo } = req.body;
+
+  if (!correo) {
+    return res.status(400).json({ error: 'Se requiere el correo' });
+  }
+
+  db.get('SELECT * FROM Usuario WHERE correo = ?', [correo], (err, row) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error al obtener el usuario' });
+    }
+    if (!row) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.json(row);
+  });
+});
+
 // Obtener todos los grupos musculares
 app.get('/api/grupo-muscular', (req, res) => {
   db.all('SELECT * FROM Grupo_muscular', [], (err, rows) => {
@@ -139,6 +159,25 @@ app.get('/api/progress', (req, res) => {
   });
 });
 
+// Obtener usuario por correo (usado como fallback)
+app.get('/api/usuario', (req, res) => {
+  const correo = req.query.correo;
+
+  if (!correo) {
+    return res.status(400).json({ error: 'Correo requerido' });
+  }
+
+  db.get('SELECT ID_Usuario FROM Usuario WHERE correo = ?', [correo], (err, row) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error al buscar el usuario' });
+    }
+    if (!row) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.json(row);
+  });
+});
 // -------------------------------------------- FIN GET ---------------------------------------------------
 
 //--------------------------------------------- PUT -------------------------------------------------------
