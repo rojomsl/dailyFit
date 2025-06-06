@@ -44,7 +44,7 @@
             </ul>
             <form class="form-inline ml-auto">
                 <img src="./images/user.svg" width="30" height="30" alt="Logo">
-                &nbsp <a class="navbar-brand" href="#"> rojomsl</a>
+                <a class="navbar-brand" href="#" id="usuarioCorreo"></a>
             </form>
         </div>
     </nav>
@@ -56,4 +56,17 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const correo = localStorage.getItem('correoUsuario');
+    const correoElemento = document.getElementById('usuarioCorreo');
+    
+    if (correo) {
+        correoElemento.textContent = correo;
+    
+    }
+  });
+</script>
+
 </html>
