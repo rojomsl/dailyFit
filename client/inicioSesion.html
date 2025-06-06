@@ -71,7 +71,7 @@
             boton.disabled = true;
             boton.textContent = "Verificando...";
 
-            const response = await fetch('http://localhost:3000/api/login', {
+            const response = await fetch('./api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -89,7 +89,7 @@
 
             // Si no vino en la respuesta, buscarlo usando el correo
             if (!usuarioId) {
-                const buscarUsuario = await fetch(`http://localhost:3000/api/usuario?correo=${encodeURIComponent(correo)}`);
+                const buscarUsuario = await fetch(`./api/usuario?correo=${encodeURIComponent(correo)}`);
                 const usuarioData = await buscarUsuario.json();
 
                 if (!buscarUsuario.ok || !usuarioData || !usuarioData.ID_Usuario) {
@@ -100,6 +100,10 @@
             }
 
             localStorage.setItem('usuarioId', usuarioId);
+            localStorage.setItem('correoUsuario', correo); 
+
+            // Alerta para verificar el valor almacenado
+            alert("Correo guardado en localStorage: " + localStorage.getItem('correoUsuario'));
 
             alert("Inicio de sesión exitoso.");
             window.location.href = "pantallaPrincipal.html";
