@@ -1,4 +1,4 @@
-const db = require('../db/db2');
+const db = require('../db/dailyFit');
 
 // Crear nuevo grupo muscular
 exports.crearGrupoMuscular = (req, res) => {
