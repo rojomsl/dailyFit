@@ -2,14 +2,14 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
 // Crear o conectar a la base de datos
-const db2 = new sqlite3.Database(path.resolve(__dirname, 'dailyfit_v2.db'), (err) => {
+const db = new sqlite3.Database(path.resolve(__dirname, 'dailyFit.db'), (err) => {
   if (err) return console.error('Error al conectar con SQLite:', err.message);
   console.log('Conectado a la base de datos SQLite ✅');
 });
 
 // Crear tablas si no existen
-db2.serialize(() => {
-  db2.run(`
+db.serialize(() => {
+  db.run(`
     CREATE TABLE IF NOT EXISTS Usuario (
       ID_Usuario INTEGER PRIMARY KEY AUTOINCREMENT,
       Nombre TEXT NOT NULL,
@@ -20,14 +20,14 @@ db2.serialize(() => {
     )
   `);
 
-  db2.run(`
+  db.run(`
     CREATE TABLE IF NOT EXISTS Grupo_muscular (
       ID_Grupo INTEGER PRIMARY KEY AUTOINCREMENT,
       Nombre_grupo_Muscular TEXT NOT NULL
     )
   `);
 
-  db2.run(`
+  db.run(`
     CREATE TABLE IF NOT EXISTS Ejercicio (
       ID_Ejercicio INTEGER PRIMARY KEY AUTOINCREMENT,
       ID_Grupo INTEGER NOT NULL,
@@ -36,7 +36,7 @@ db2.serialize(() => {
     )
   `);
 
-  db2.run(`
+  db.run(`
     CREATE TABLE IF NOT EXISTS Progreso (
       ID_Progreso INTEGER PRIMARY KEY AUTOINCREMENT,
       ID_Usuario INTEGER NOT NULL,
@@ -50,4 +50,4 @@ db2.serialize(() => {
   `);
 });
 
-module.exports = db2;
+module.exports = db;
