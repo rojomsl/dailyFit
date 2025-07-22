@@ -7,16 +7,18 @@ const PORT = 3000;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, './client')));
+app.use('/modules', express.static(path.join(__dirname, 'client/modules')));
+app.use('/images', express.static(path.join(__dirname, 'client/images')));
 
-// Rutas
+
+// Rutas API
 app.use('/api/usuario', require('./routes/usuarios'));
 app.use('/api/ejercicio', require('./routes/ejercicios'));
 app.use('/api/progress', require('./routes/progreso'));
 
 // Ruta principal
 app.get('/dailyFit', (req, res) => {
-  res.sendFile(path.join(__dirname, './index.html'));
+  res.sendFile(path.join(__dirname, 'client', 'index.html'));
 });
 
 app.listen(PORT, () => {
