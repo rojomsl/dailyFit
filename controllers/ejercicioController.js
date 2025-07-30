@@ -2,17 +2,17 @@ const db = require('../db/dailyFit');
 
 // Crear nuevo grupo muscular
 exports.crearGrupoMuscular = (req, res) => {
-  const { Nombre_grupo_Muscular } = req.body;
+  const { nombre } = req.body;
 
-  if (!Nombre_grupo_Muscular) {
+  if (!nombre) {
     return res.status(400).json({ error: 'El nombre del grupo muscular es requerido' });
   }
 
-  const stmt = `INSERT INTO Grupo_muscular (Nombre_grupo_Muscular) VALUES (?)`;
+  const stmt = `INSERT INTO GrupoMuscular (nombre) VALUES (?)`;
 
-  db.run(stmt, [Nombre_grupo_Muscular], function (err) {
+  db.run(stmt, [nombre], function (err) {
     if (err) return res.status(500).json({ error: 'Error al guardar grupo muscular' });
-    res.status(201).json({ ID_Grupo: this.lastID, Nombre_grupo_Muscular });
+    res.status(201).json({ id: this.lastID, nombre });
   });
 };
 

@@ -9,30 +9,36 @@ const db = new sqlite3.Database(path.resolve(__dirname, 'dailyFit.db'), (err) =>
 
 // Crear tablas si no existen
 db.serialize(() => {
-  db.run(`
-    CREATE TABLE IF NOT EXISTS Usuario (
-      ID_Usuario INTEGER PRIMARY KEY AUTOINCREMENT,
-      Nombre TEXT NOT NULL,
-      Genero TEXT NOT NULL,
-      Edad INTEGER NOT NULL,
-      Telefono TEXT,
-      Correo TEXT UNIQUE
-    )
-  `);
 
   db.run(`
-    CREATE TABLE IF NOT EXISTS Grupo_muscular (
-      ID_Grupo INTEGER PRIMARY KEY AUTOINCREMENT,
-      Nombre_grupo_Muscular TEXT NOT NULL
-    )
-  `);
+      CREATE TABLE IF NOT EXISTS SesionEntrenamiento (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        Fecha DATE NOT NULL,
+        Notas TEXT
+      )
+    `);
+
+  db.run(`
+      CREATE TABLE IF NOT EXISTS EjercicioAux (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id_sesionEntrenamiento INTEGER NOT NULL UNIQUE,
+        id_ejercicio INTEGER NOT NULL UNIQUE
+      )
+    `);
 
   db.run(`
     CREATE TABLE IF NOT EXISTS Ejercicio (
-      ID_Ejercicio INTEGER PRIMARY KEY AUTOINCREMENT,
-      ID_Grupo INTEGER NOT NULL,
-      Nombre_ejercicio TEXT NOT NULL,
-      FOREIGN KEY (ID_Grupo) REFERENCES Grupo_muscular(ID_Grupo)
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id_Grupo INTEGER,
+      nombre TEXT NOT NULL,
+      FOREIGN KEY (id_Grupo) REFERENCES GrupoMuscular(id)
+    )
+    `);
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS GrupoMuscular (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nombre TEXT NOT NULL
     )
   `);
 
@@ -48,6 +54,18 @@ db.serialize(() => {
       FOREIGN KEY (ID_Ejercicio) REFERENCES Ejercicio(ID_Ejercicio)
     )
   `);
+
+    db.run(`
+    CREATE TABLE IF NOT EXISTS Usuario (
+      ID_Usuario INTEGER PRIMARY KEY AUTOINCREMENT,
+      Nombre TEXT NOT NULL,
+      Genero TEXT NOT NULL,
+      Edad INTEGER NOT NULL,
+      Telefono TEXT,
+      Correo TEXT UNIQUE
+    )
+  `);
+
 });
 
 module.exports = db;
