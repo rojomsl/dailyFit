@@ -26,17 +26,54 @@ exports.obtenerGruposMusculares = (req, res) => {
 
 // Crear nuevo ejercicio
 exports.crearEjercicio = (req, res) => {
-  const { ID_Grupo, Nombre_ejercicio } = req.body;
+  const { id_Grupo, nombre } = req.body;
 
-  if (!ID_Grupo || !Nombre_ejercicio) {
+  if (!id_Grupo || !nombre) {
     return res.status(400).json({ error: 'Todos los campos son requeridos' });
   }
 
-  const stmt = `INSERT INTO Ejercicio (ID_Grupo, Nombre_ejercicio) VALUES (?, ?)`;
+  const stmt = `INSERT INTO Ejercicio (id_Grupo, nombre) VALUES (?, ?)`;
 
-  db.run(stmt, [ID_Grupo, Nombre_ejercicio], function (err) {
+  db.run(stmt, [id_Grupo, nombre], function (err) {
     if (err) return res.status(500).json({ error: 'Error al guardar ejercicio' });
-    res.status(201).json({ ID_Ejercicio: this.lastID, ID_Grupo, Nombre_ejercicio });
+    res.status(201).json({ id: this.lastID, id_Grupo, nombre });
+  });
+};
+
+// Crear nueva SesionEntrenamiento
+exports.crearSesionEntrenamiento = (req, res) => {
+  const { id_usuario, Notas } = req.body;
+
+  if (!id_usuario) {
+    return res.status(400).json({ error: 'El campo id_usuario es requerido' });
+  }
+
+  const stmt = `INSERT INTO SesionEntrenamiento (id_usuario, Notas) VALUES (?, ?)`;
+
+  db.run(stmt, [id_usuario, Notas], function (err) {
+    if (err) {
+  console.error('Error al guardar sesión:', err);
+  return res.status(500).json({ error: err.message });
+}
+
+    res.status(201).json({ id: this.lastID, id_usuario, Notas });
+  });
+};
+
+
+// Crear nuevo EjercicioAux para sesion
+exports.crearEjercicioAux = (req, res) => {
+  const { id_sesionEntrenamiento, id_ejercicio } = req.body;
+
+  if (!id_sesionEntrenamiento || !id_ejercicio) {
+    return res.status(400).json({ error: 'Todos los campos son requeridos' });
+  }
+
+  const stmt = `INSERT INTO Ejercicio (id_sesionEntrenamiento, id_ejercicio) VALUES (?, ?)`;
+
+  db.run(stmt, [id_sesionEntrenamiento, id_ejercicio], function (err) {
+    if (err) return res.status(500).json({ error: 'Error al guardar ejercicio' });
+    res.status(201).json({ id: this.lastID, id_sesionEntrenamiento, id_ejercicio });
   });
 };
 
