@@ -7,14 +7,18 @@ const db = new sqlite3.Database(path.resolve(__dirname, 'dailyFit.db'), (err) =>
   console.log('Conectado a la base de datos SQLite ✅');
 });
 
+db.run("PRAGMA foreign_keys = ON"); 
+
 // Crear tablas si no existen
 db.serialize(() => {
 
   db.run(`
       CREATE TABLE IF NOT EXISTS SesionEntrenamiento (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        Fecha DATE NOT NULL,
-        Notas TEXT
+        id_usuario INTEGER,
+        Fecha DATETIME NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+        Notas TEXT,
+        FOREIGN KEY (id_usuario) REFERENCES Usuario(id)
       )
     `);
 
@@ -48,7 +52,7 @@ db.serialize(() => {
       ID_Usuario INTEGER NOT NULL,
       ID_Ejercicio INTEGER NOT NULL,
       Semana TEXT NOT NULL,
-      Repeticiones INTEGER NOT NULL,
+      Repeticiones INTEGER NOT NULL,  
       Peso REAL NOT NULL,
       FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario),
       FOREIGN KEY (ID_Ejercicio) REFERENCES Ejercicio(ID_Ejercicio)
@@ -57,7 +61,7 @@ db.serialize(() => {
 
     db.run(`
     CREATE TABLE IF NOT EXISTS Usuario (
-      ID_Usuario INTEGER PRIMARY KEY AUTOINCREMENT,
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
       Nombre TEXT NOT NULL,
       Genero TEXT NOT NULL,
       Edad INTEGER NOT NULL,

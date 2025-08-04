@@ -6,7 +6,7 @@ const app = express();
 const PORT = 3000;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json());  
 app.use('/modules', express.static(path.join(__dirname, 'client/modules')));
 app.use('/images', express.static(path.join(__dirname, 'client/images')));
 
