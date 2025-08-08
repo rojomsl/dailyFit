@@ -1,3 +1,4 @@
+const mensajeRequeridos = require('./utilities.js');
 const db = require('../db/dailyFit');
 
 // Crear nuevo grupo muscular
@@ -42,21 +43,26 @@ exports.crearEjercicio = (req, res) => {
 
 // Crear nueva SesionEntrenamiento
 exports.crearSesionEntrenamiento = (req, res) => {
-  const { id_usuario, Notas } = req.body;
+  const { id_usuario, fecha, notas } = req.body;
 
-  if (!id_usuario) {
-    return res.status(400).json({ error: 'El campo id_usuario es requerido' });
+   const camposRequeridos = [
+    { valor: id_usuario, nombre: 'id_usuario' },
+    { valor: fecha, nombre: 'fecha' }
+  ];
+
+  if (mensajeRequeridos(camposRequeridos)) {
+    return res.status(400).json({ error: mensajeRequeridos(camposRequeridos) });
   }
 
   const stmt = `INSERT INTO SesionEntrenamiento (id_usuario, Notas) VALUES (?, ?)`;
 
-  db.run(stmt, [id_usuario, Notas], function (err) {
+  db.run(stmt, [id_usuario, notas], function (err) {
     if (err) {
   console.error('Error al guardar sesión:', err);
   return res.status(500).json({ error: err.message });
 }
 
-    res.status(201).json({ id: this.lastID, id_usuario, Notas });
+    res.status(201).json({ id: this.lastID, id_usuario, notas });
   });
 };
 
@@ -69,7 +75,7 @@ exports.crearEjercicioAux = (req, res) => {
     return res.status(400).json({ error: 'Todos los campos son requeridos' });
   }
 
-  const stmt = `INSERT INTO Ejercicio (id_sesionEntrenamiento, id_ejercicio) VALUES (?, ?)`;
+  const stmt = `INSERT INTO EjercicioAux (id_sesionEntrenamiento, id_ejercicio) VALUES (?, ?)`;
 
   db.run(stmt, [id_sesionEntrenamiento, id_ejercicio], function (err) {
     if (err) return res.status(500).json({ error: 'Error al guardar ejercicio' });
