@@ -13,24 +13,49 @@ db.run("PRAGMA foreign_keys = ON");
 db.serialize(() => {
 
   db.run(`
-      CREATE TABLE IF NOT EXISTS SesionEntrenamiento (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        id_usuario INTEGER,
-        Fecha DATETIME NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-        Notas TEXT,
-        FOREIGN KEY (id_usuario) REFERENCES Usuario(id)
-      )
+    CREATE TABLE IF NOT EXISTS SesionEntrenamiento (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id_Usuario INTEGER,
+      fecha DATETIME NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+      notas TEXT,
+      FOREIGN KEY (id_Usuario) REFERENCES Usuario(id)
+    )
     `);
+  
+   db.run(`
+    CREATE TABLE IF NOT EXISTS EjercicioAux (
+      id INTEGER PRIMARY KEY,
+      id_SesionEntrenamiento INTEGER,
+      id_Ejercicio INTEGER,
+      num_serie INTEGER,
+      FOREIGN KEY (id_SesionEntrenamiento) REFERENCES SesionEntrenamiento(id),
+      FOREIGN KEY (id_Ejercicio) REFERENCES Ejercicio(id)
+    )
+  `);
 
   db.run(`
-      CREATE TABLE IF NOT EXISTS EjercicioAux (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        id_sesionEntrenamiento INTEGER NOT NULL UNIQUE,
-        id_ejercicio INTEGER NOT NULL UNIQUE
-      )
-    `);
+    CREATE TABLE IF NOT EXISTS Serie (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id_EjercicioAux INTEGER,  
+      peso REAL NOT NULL,
+      repeticiones INTEGER NOT NULL,
+      orden INTEGER,    
+      FOREIGN KEY (id_EjercicioAux) REFERENCES EjercicioAux(id)
+    )
+  `);
 
-  db.run(`
+    db.run(`
+    CREATE TABLE IF NOT EXISTS Usuario (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nombre TEXT NOT NULL,
+      genero TEXT NOT NULL,
+      edad INTEGER NOT NULL,
+      telefono TEXT,
+      correo TEXT UNIQUE
+    )
+  `);
+
+   db.run(`
     CREATE TABLE IF NOT EXISTS Ejercicio (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       id_Grupo INTEGER,
@@ -43,30 +68,6 @@ db.serialize(() => {
     CREATE TABLE IF NOT EXISTS GrupoMuscular (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       nombre TEXT NOT NULL
-    )
-  `);
-
-  db.run(`
-    CREATE TABLE IF NOT EXISTS Progreso (
-      ID_Progreso INTEGER PRIMARY KEY AUTOINCREMENT,
-      ID_Usuario INTEGER NOT NULL,
-      ID_Ejercicio INTEGER NOT NULL,
-      Semana TEXT NOT NULL,
-      Repeticiones INTEGER NOT NULL,  
-      Peso REAL NOT NULL,
-      FOREIGN KEY (ID_Usuario) REFERENCES Usuario(ID_Usuario),
-      FOREIGN KEY (ID_Ejercicio) REFERENCES Ejercicio(ID_Ejercicio)
-    )
-  `);
-
-    db.run(`
-    CREATE TABLE IF NOT EXISTS Usuario (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      Nombre TEXT NOT NULL,
-      Genero TEXT NOT NULL,
-      Edad INTEGER NOT NULL,
-      Telefono TEXT,
-      Correo TEXT UNIQUE
     )
   `);
 
